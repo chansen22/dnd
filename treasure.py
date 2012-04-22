@@ -5,7 +5,7 @@ class Treasure:
     self.treasureId = data.pop()
 
   def display(self):
-    print "Id:", self.treasureId, "Desc:", self.desc, "Value:", self.value
+    print("Id:", self.treasureId, "Desc:", self.desc, "Value:", self.value)
 
   def displayId(self):
     return self.treasureId

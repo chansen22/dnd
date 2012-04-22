@@ -5,7 +5,7 @@ class Monster:
     self.monsterId = data.pop()
 
   def display(self):
-    print "Type:", self.monsterType, "Id:", self.monsterId, "Hits:", self.monsterHits
+    print("Type:", self.monsterType, "Id:", self.monsterId, "Hits:", self.monsterHits)
 
   def displayId(self):
     return self.monsterId

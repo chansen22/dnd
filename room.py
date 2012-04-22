@@ -8,7 +8,10 @@ class Room():
     self.roomId = data.pop()
 
   def display(self):
-    print "Id:",self.roomId, "Desc:",self.roomDesc, "Monster Id:",self.monsterId, "Treasure Id:",self.treasureId
+    print("Id:",self.roomId, "Desc:",self.roomDesc, "Monster Id:",self.monsterId, "Treasure Id:",self.treasureId)
 
   def displayId(self):
+    return self.roomId
+
+  def name(self):
     return self.roomId
