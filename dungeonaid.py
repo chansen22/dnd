@@ -62,46 +62,6 @@ class DungeonAid:
       monster = Monster(monsterData)
       self.monsterList.append(monster)
 
-  def createRoom(self):
-    print("Please enter a room Id, description, monster Id and treasure Id")
-    print("Ex: 5 \n\"A dark and smelly room\" \n3 \n4\n0 quits")
-    if self.monsterList:
-      print("List of monsters:")
-      for x in self.monsterList:
-        x.display()
-      print("\n")
-    else:
-      print("Monster list is empty\n")
-    if self.treasureList:
-      print("List of treasures:")
-      for x in self.treasureList:
-        x.display()
-      print("\n")
-    else:
-      print("Treasure list is empty\n")
-    roomData = []
-    while input is not None:
-      id = input()
-      if id == 0:
-        break
-      roomData.append(id)
-      desc = input()
-      roomData.append(desc)
-      monsterId = input()
-      roomData.append(monsterId)
-      treasureId = input()
-      roomData.append(treasureId)
-      break
-    if id != 0:
-      room = Room(roomData)
-      for x in self.treasureList:
-        if treasureId == x.displayId():
-          treasure = x
-      for x in self.monsterList:
-        if monsterId == x.displayId():
-          monster = x
-      self.dungeon.addRoom(room, treasure, monster)
-
   def deleteRoom(self):
     print("Please enter a room Id")
     print("Ex: 5")
@@ -216,7 +176,7 @@ class DungeonAid:
 dungeonAid = DungeonAid()
 
 roomdata = []
-roomdata.append(1)
+roomdata.append("Room 1")
 roomdata.append("A dark room")
 roomdata.append(2)
 roomdata.append(3)
@@ -292,10 +252,62 @@ quitbutton["fg"] = "Red"
 quitbutton["command"] = quitframe.quit
 quitbutton.pack(side = RIGHT)
 
+class AddMonsterTextFrame:
+  def __init(self):
+    self.top  =  self.top  =  Toplevel(mainframe)
+    textframe = Frame(self.top)
+    textframe.pack(side = TOP)
+    titleframe = Frame(textframe)
+    titleframe.pack(side = TOP)
+    idframe = Frame(textframe)
+    idframe.pack(side = TOP)
+    descframe = Frame(textframe)
+    descframe.pack(side = TOP)
+    listframe = Frame(textframe)
+    listframe.pack(side = TOP)
+    buttonframe = Frame(textframe)
+    buttonframe.pack(side = TOP)
+    addbuttonframe = Frame(buttonframe)
+    addbuttonframe.pack(side = LEFT)
+    cancelbuttonframe = Frame(buttonframe)
+    cancelbuttonframe.pack(side = RIGHT)
+
+    titlelabel = Label(titleframe)
+    titlelabel["text"] = "Add Room"
+    titlelabel.pack(side = TOP)
+
+    idlabel = Label(idframe)
+    idlabel["text"] = "Id:"
+    idlabel.pack(side = LEFT, padx = 5)
+    self.identry = Entry(idframe)
+    self.identry.pack(side = RIGHT, padx = 5)
+
+    desclabel = Label(descframe)
+    desclabel["text"] = "Desc:"
+    desclabel.pack(side = LEFT, padx = 5, pady = 5)
+    self.descentry = Entry(descframe)
+    self.descentry.pack(side = RIGHT, padx = 5, pady = 5)
+
+    addbutton = Button(addbuttonframe)
+    addbutton["text"] ="Add"
+    addbutton["command"] = lambda: self.createMonster()
+    addbutton.pack(side = LEFT)
+    cancelbutton = Button(cancelbuttonframe)
+    cancelbutton["text"] ="Cancel"
+    cancelbutton["fg"] ="Red"
+    cancelbutton["command"] = lambda: self.top.destroy()
+    cancelbutton.pack(side = RIGHT)
+
+    self.top.transient()
+
+  def createMonster(self):
+    monsterList = []
+    self.top.destroy()
+
 class Addroomtextframe:
   def __init__(self):
-    top  =  self.top  =  Toplevel(mainframe)
-    textframe = Frame(top)
+    self.top  =  self.top  =  Toplevel(mainframe)
+    textframe = Frame(self.top)
     textframe.pack(side = TOP)
     titleframe = Frame(textframe)
     titleframe.pack(side = TOP)
@@ -323,14 +335,14 @@ class Addroomtextframe:
     idlabel = Label(idframe)
     idlabel["text"] = "Id:"
     idlabel.pack(side = LEFT, padx = 5)
-    identry = Entry(idframe)
-    identry.pack(side = RIGHT, padx = 5)
+    self.identry = Entry(idframe)
+    self.identry.pack(side = RIGHT, padx = 5)
 
     desclabel = Label(descframe)
     desclabel["text"] = "Desc:"
     desclabel.pack(side = LEFT, padx = 5, pady = 5)
-    descentry = Entry(descframe)
-    descentry.pack(side = RIGHT, padx = 5, pady = 5)
+    self.descentry = Entry(descframe)
+    self.descentry.pack(side = RIGHT, padx = 5, pady = 5)
 
     monsterlist = Listbox(monsterframe)
     monsterlist.pack(side = LEFT, pady = 5)
@@ -348,15 +360,21 @@ class Addroomtextframe:
 
     addbutton = Button(addbuttonframe)
     addbutton["text"] ="Add"
-    #addbutton["command"] = ADD ROOM HERE
+    addbutton["command"] = lambda: self.createRoom()
     addbutton.pack(side = LEFT)
     cancelbutton = Button(cancelbuttonframe)
     cancelbutton["text"] ="Cancel"
     cancelbutton["fg"] ="Red"
-    cancelbutton["command"] = lambda: top.destroy()
+    cancelbutton["command"] = lambda: self.top.destroy()
     cancelbutton.pack(side = RIGHT)
 
-    top.transient()
+    self.top.transient()
+
+  def createRoom(self):
+    stackOfInfo = []
+    stackOfInfo = (self.identry.get(), self.descentry.get())
+    print "Room id entered is: ", stackOfInfo[0], " and desc entered is: ", stackOfInfo[1] 
+    self.top.destroy()
 
 roomframe = Frame(mainframe)
 roomframe.pack(side = TOP)
@@ -374,7 +392,7 @@ scrollbar.config(command = roomlist.yview)
 
 listofrooms = dungeonAid.dungeon.rooms
 for each in listofrooms:
-  roomlist.insert(END, each.name)
+  roomlist.insert(END, each.roomId)
 
 roomentry = Entry(roomframe)
 roomentry["width"] = 15
