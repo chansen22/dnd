@@ -48,8 +48,8 @@ n.add(roomTab, text="Room")
 n.add(monsterTab, text="Monster")
 n.add(treasureTab, text="Treasure")
 
-class AddMonsterTextFrame:
-  def __init(self):
+class AddTreasureTextFrame:
+  def __init__(self):
     self.top  =  self.top  =  Toplevel(mainframe)
     textframe = Frame(self.top)
     textframe.pack(side = TOP)
@@ -69,7 +69,59 @@ class AddMonsterTextFrame:
     cancelbuttonframe.pack(side = RIGHT)
 
     titlelabel = Label(titleframe)
-    titlelabel["text"] = "Add Room"
+    titlelabel["text"] = "Add Treasure"
+    titlelabel.pack(side = TOP)
+
+    idlabel = Label(idframe)
+    idlabel["text"] = "Id:"
+    idlabel.pack(side = LEFT, padx = 5)
+    self.identry = Entry(idframe)
+    self.identry.pack(side = RIGHT, padx = 5)
+
+    desclabel = Label(descframe)
+    desclabel["text"] = "Desc:"
+    desclabel.pack(side = LEFT, padx = 5, pady = 5)
+    self.descentry = Entry(descframe)
+    self.descentry.pack(side = RIGHT, padx = 5, pady = 5)
+
+    addbutton = Button(addbuttonframe)
+    addbutton["text"] ="Add"
+    addbutton["command"] = lambda: self.createTreasure()
+    addbutton.pack(side = LEFT)
+    cancelbutton = Button(cancelbuttonframe)
+    cancelbutton["text"] ="Cancel"
+    cancelbutton["fg"] ="Red"
+    cancelbutton["command"] = lambda: self.top.destroy()
+    cancelbutton.pack(side = RIGHT)
+
+    self.top.transient()
+
+  def createTreasure(self):
+    treasureList = []
+    self.top.destroy()
+
+class AddMonsterTextFrame:
+  def __init__(self):
+    self.top  =  self.top  =  Toplevel(mainframe)
+    textframe = Frame(self.top)
+    textframe.pack(side = TOP)
+    titleframe = Frame(textframe)
+    titleframe.pack(side = TOP)
+    idframe = Frame(textframe)
+    idframe.pack(side = TOP)
+    descframe = Frame(textframe)
+    descframe.pack(side = TOP)
+    listframe = Frame(textframe)
+    listframe.pack(side = TOP)
+    buttonframe = Frame(textframe)
+    buttonframe.pack(side = TOP)
+    addbuttonframe = Frame(buttonframe)
+    addbuttonframe.pack(side = LEFT)
+    cancelbuttonframe = Frame(buttonframe)
+    cancelbuttonframe.pack(side = RIGHT)
+
+    titlelabel = Label(titleframe)
+    titlelabel["text"] = "Add Monster"
     titlelabel.pack(side = TOP)
 
     idlabel = Label(idframe)
@@ -97,7 +149,9 @@ class AddMonsterTextFrame:
     self.top.transient()
 
   def createMonster(self):
-    monsterList = []
+    monsterData = []
+    monsterData = (self.identry.get(), self.descentry.get())
+    print monsterData
     self.top.destroy()
 
 class Addroomtextframe:
@@ -258,7 +312,7 @@ monsterAddButton["text"] = "Add"
 monsterAddButton["command"] = lambda: AddMonsterTextFrame()
 monsterAddButton.pack(side = LEFT)
 
-#MONSTER FRAME
+#TREASURE FRAME
 treasureMainFrame = Frame(treasureTab)
 treasureMainFrame.pack()
 treasureFileFrame = Frame(treasureMainFrame)
