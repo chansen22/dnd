@@ -1,8 +1,8 @@
 class Treasure:
   def __init__(self, data):
-    self.value = data.pop()
-    self.desc = data.pop()
-    self.treasureId = data.pop()
+    self.treasureId = data[0]
+    self.desc = data[1]
+    self.value = data[2]
 
   def display(self):
     print("Id:", self.treasureId, "Desc:", self.desc, "Value:", self.value)
