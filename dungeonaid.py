@@ -44,14 +44,16 @@ roomframe.pack(side = TOP)
 roombottomframe = Frame(mainframe)
 roombottomframe.pack(side = BOTTOM)
 
-roomentry = Entry(roomframe)
-roomentry["width"] = 15
-roomentry.pack(side = RIGHT)
-
 roomaddbutton = Button(roombottomframe)
 roomaddbutton["text"] = "Add"
 roomaddbutton["command"] = lambda: Addroomtextframe()
 roomaddbutton.pack(side = LEFT)
+
+roomInfoFrame = Frame(roomframe)
+roomInfoFrame.pack(side = RIGHT)
+
+roomInfoListFrame = Frame(roomInfoFrame)
+roomInfoListFrame.pack(side = BOTTOM)
 
 #MONSTER FRAME
 monsterMainFrame = Frame(monsterTab)
@@ -102,6 +104,7 @@ treasureInfoFrame.pack(side = RIGHT)
 class DungeonAid:
   def __init__(self):
     self.dungeon = Dungeon()
+    self.roomList = []
     self.treasureList = []
     self.monsterList = []
     self.monsterListBox = Listbox(monsterFrame)
@@ -113,6 +116,8 @@ class DungeonAid:
     self.roomListBox = Listbox(roomframe)
     self.roomListBox.pack(side = LEFT)
     self.roomListBox.bind("<Double-Button-1>", self.getRoomInfo)
+    self.roomInfoListBox = Listbox(roomInfoListFrame)
+    self.roomInfoListBox.pack(side = LEFT)
 
     self.monsterInfoId = Label(monsterInfoFrame)
     self.monsterInfoId["text"] = "Monster Id: "
@@ -137,6 +142,14 @@ class DungeonAid:
     self.treasureInfoHits= Label(treasureInfoFrame)
     self.treasureInfoHits["text"] = "Treasure Value: "
     self.treasureInfoHits.pack()
+
+    self.roomInfoId = Label(roomInfoFrame)
+    self.roomInfoId["text"] = "Room Id: "
+    self.roomInfoId.pack()
+
+    self.roomInfoDesc = Label(roomInfoFrame)
+    self.roomInfoDesc["text"] = "Room Desc: "
+    self.roomInfoDesc.pack()
 
   def updateMonsterList(self):
     self.monsterListBox.delete(0, END)
@@ -168,7 +181,12 @@ class DungeonAid:
     self.treasureInfoHits["text"] = "Treasure Value: " + self.treasureList[stuff].value
 
   def getRoomInfo(self, event):
-    print self.roomListBox.curselection()
+    item = self.roomInfoListBox.curselection()
+    stuff = int(item[0])
+    self.roomInfoId["text"] = "Room Id: " + self.roomList[stuff].roomId
+    self.roomInfoDesc["text"] = "Room Desc: " + self.roomList[stuff].roomDesc
+    self.roomInfoListBox.delete(0, END)
+    #for each in self.roo
 
 dungeonAid = DungeonAid()
 
@@ -176,6 +194,11 @@ scrollbar = Scrollbar(roomframe)
 scrollbar.pack(side = LEFT, fill = Y)
 dungeonAid.roomListBox.config(yscrollcommand = scrollbar.set)
 scrollbar.config(command = dungeonAid.roomListBox.yview)
+
+roomInfoScrollbar = Scrollbar(roomInfoListFrame)
+roomInfoScrollbar.pack(side = LEFT, fill = Y)
+dungeonAid.roomInfoListBox.config(yscrollcommand = roomInfoScrollbar.set)
+roomInfoScrollbar.config(command = dungeonAid.roomInfoListBox.yview)
 
 monsterButtonFrame = Frame(monsterMainFrame)
 monsterButtonFrame.pack(side = BOTTOM)
