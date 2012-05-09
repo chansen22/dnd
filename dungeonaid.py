@@ -205,6 +205,16 @@ class DungeonAid:
     self.roomInfoListBox.delete(0, END)
     #for each in self.roo
 
+  def makeRoom(self, name, desc, monsterId, treasureId):
+    for each in self.monsterList:
+      if monsterId is each.monsterId:
+        monster = each
+    for each in self.treasureList:
+      if treasureId is each.treasureId:
+        treasure = each
+    room = Room(name, desc, monster, treasure)
+    self.roomList += room
+
 dungeonAid = DungeonAid()
 
 scrollbar = Scrollbar(roomframe)
@@ -368,7 +378,7 @@ class AddMonsterTextFrame:
 
 class Addroomtextframe:
   def __init__(self):
-    self.top  =  self.top  =  Toplevel(mainframe)
+    self.top = Toplevel(mainframe)
     textframe = Frame(self.top)
     textframe.pack(side = TOP)
     titleframe = Frame(textframe)
@@ -398,13 +408,13 @@ class Addroomtextframe:
     idlabel["text"] = "Id:"
     idlabel.pack(side = LEFT, padx = 5)
     self.identry = Entry(idframe)
-    self.identry.pack(side = RIGHT, padx = 5)
+    self.identry.pack()
 
     desclabel = Label(descframe)
     desclabel["text"] = "Desc:"
     desclabel.pack(side = LEFT, padx = 5, pady = 5)
     self.descentry = Entry(descframe)
-    self.descentry.pack(side = RIGHT, padx = 5, pady = 5)
+    self.descentry.pack()
 
     self.monsterlist = Listbox(monsterframe)
     self.monsterlist.pack(side = LEFT, pady = 5)
@@ -415,18 +425,9 @@ class Addroomtextframe:
     self.monsterlist.config(yscrollcommand = monsterscrollbar.set)
     monsterscrollbar.config(command = self.monsterlist.yview)
 
-    self.treasurelist = Listbox(treasureframe)
-    self.treasurelist.pack(side = LEFT, pady = 5)
-    for each in dungeonAid.treasureList:
-      self.treasurelist.insert(END, each.treasureId)
-    treasurescrollbar = Scrollbar(treasureframe)
-    treasurescrollbar.pack(side = LEFT)
-    self.treasurelist.config(yscrollcommand = treasurescrollbar.set)
-    treasurescrollbar.config(command = self.treasurelist.yview)
-
     addbutton = Button(addbuttonframe)
-    addbutton["text"] ="Add"
-    addbutton["command"] = lambda: self.createRoom()
+    addbutton["text"] ="Add Treasure"
+    addbutton["command"] = lambda: self.makeTempRoom()
     addbutton.pack(side = LEFT)
     cancelbutton = Button(cancelbuttonframe)
     cancelbutton["text"] ="Cancel"
@@ -436,10 +437,38 @@ class Addroomtextframe:
 
     self.top.transient()
 
-  def createRoom(self):
-    stackOfInfo = []
-    stackOfInfo = (self.identry.get(), self.descentry.get())
-    print "Room id entered is: ", stackOfInfo[0], " and desc entered is: ", stackOfInfo[1] 
+  def createRoom(self, data, monster, treasure):
+    dungeonAid.makeRoom(data[0], data[1], monster[0], treasure[0])
     self.top.destroy()
+
+  def makeTempRoom(self):
+    data = []
+    data = (self.identry.get(), self.descentry.get())
+    monster = self.monsterlist.curselection()
+    self.top.destroy()
+    self.addTreasure(data, monster)
+
+  def addTreasure(self, data, monster):
+    self.top = Toplevel(mainframe)
+    treasureframe = Frame(self.top)
+    treasureframe.pack(side = TOP)
+    self.treasurelist = Listbox(treasureframe)
+    self.treasurelist.pack(side = LEFT, pady = 5)
+    for each in dungeonAid.treasureList:
+      self.treasurelist.insert(END, each.treasureId)
+    treasurescrollbar = Scrollbar(treasureframe)
+    treasurescrollbar.pack(side = LEFT)
+    self.treasurelist.config(yscrollcommand = treasurescrollbar.set)
+    treasurescrollbar.config(command = self.treasurelist.yview)
+    treasure = self.treasurelist.curselection()
+    addbutton = Button(treasureframe)
+    addbutton.pack()
+    addbutton["text"] = "Add Room"
+    addbutton["command"] = lambda: self.createRoom(data, monster, treasure)
+    cancelbutton = Button(treasureframe)
+    cancelbutton.pack()
+    cancelbutton["text"] = "Cancel"
+    cancelbutton["fg"] = "Red"
+    cancelbutton["command"] = lambda: self.top.destroy()
 
 root.mainloop()
